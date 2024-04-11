@@ -1,0 +1,1 @@
+execute "powercfg -setdcvalueindex SCHEME_CURRENT SUB_BATTERY BATACTIONCRIT 0"

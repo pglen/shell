@@ -1,0 +1,11 @@
+#!/bin/bash
+
+DDD=/media/peterglen/akoback
+if [ ! -d $DDD ] ; then
+	echo "Insert jump drive (or open in file manager)"
+	exit
+fi
+
+cp -au * $DDD/ubuvm
+
+#shutdown

@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ "$1" == "" ] ; then
+	echo use: grepkill signal procname
+	exit 0
+fi
+if [ "$2" == "" ] ; then
+	echo Missing process name
+	echo use: grepkill signal procname
+	exit 0
+fi
+
+ps xa | grep $2 | grep -v grep | awk {'print $1'} | xargs -i kill $1 {}&
+
