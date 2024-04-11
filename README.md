@@ -5,7 +5,7 @@ as a collection of tools, but really are backups to be used on disaster recovery
 
 A lot of useful stuff, but very specific to a particular system. Use caution.
 Many of the scripts do what the name suggests, but there is no telling what impact
-it my have on unexpected configurations. Again, caution.
+it my have on unexpected configurations. Again, caution. RTFS
 
 Table to be filled in:
 
@@ -44,7 +44,7 @@ Table to be filled in:
 |checkallin.sh  | To be filled in | |
 |check.sh   | To be filled in | |
 |chrome_scr.sh  | To be filled in | |
-|clean1.sh  | To be filled in | |
+|clean1.sh  | the clean scripts usually clean after compilation |  |
 |clean2.sh  | To be filled in | |
 |clean3.sh  | To be filled in | |
 |_clean4.sh | To be filled in | |
@@ -147,7 +147,7 @@ Table to be filled in:
 |removeif.sh    | To be filled in | |
 |robomake.sh    | To be filled in | |
 |runbird.sh | To be filled in | |
-|savefloppy.sh  | To be filled in | of my |
+|savefloppy.sh  | To be filled in | oh my ... |
 |savezip.sh | To be filled in | |
 |setusb.sh  | To be filled in | |
 |shuffle2.sh    | To be filled in | |
@@ -174,4 +174,4 @@ By:
 
 Peter Glen
 
-# EOF
+// EOF
