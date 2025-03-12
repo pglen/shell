@@ -1,11 +1,13 @@
-
-
+# The usual suspects
 
 all:
 	echo copy docs git
 
+clean:
+	rm -f aa bb cc
+
 copy:
-	cp -uv * ~/pgbin
+	cp -auv *.sh ~/pgbin
 
 git:
 	git add .
