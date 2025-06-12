@@ -16,6 +16,7 @@ fi
 
 cd $HOME
 #echo $HOME $(pwd)
+
 if [ ! -d $DDD/pgpygtk ] ; then
 	echo "Please start from home dir."
 	exit
