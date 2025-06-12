@@ -1,17 +1,17 @@
 # The usual suspects
 
 all:
-	echo copy docs git
+	@echo Targets: copy docs git
 
 clean:
 	rm -f aa bb cc
 
 copy:
-	cp -auv *.sh ~/pgbin
+	@cp -auv *.sh ~/pgbin
 
 git:
-	git add .
-	git commit -m "autocheck"
-	git push
+	@git add .
+	@git commit -m "autocheck"
+	@git push
 
 # EOF
