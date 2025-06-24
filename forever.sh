@@ -7,14 +7,14 @@ while getopts 'w:' opt; do
   case "$opt" in
     w)
       WWW=$OPTARG
-      echo "Processing option 'w'" $WWW
+      #echo "Processing option 'w'" $WWW
       shift
       shift
       ;;
 
     ?)
       echo -e "Invalid command option."
-      echo -e "Usage: $(basename $0) [ -w ] maxlen"
+      echo -e "Usage: $(basename $0) [-v[v]] [ -w ] maxlen"
       exit 1
       ;;
 
