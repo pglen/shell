@@ -24,10 +24,10 @@ if [ ! -d ./pgpygtk ] ; then
 	exit
 fi
 
-#if [ "$(pwd)" != "$HOME" ] ; then
-#    echo "Must start from home directory"
-#    exit
-#fi
+if [ "$(pwd)" != "$HOME" ] ; then
+    echo "Warn: not started from home directory"
+    # exit
+fi
 #exit
 #	    	--exclude=".git"              \
 
