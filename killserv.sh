@@ -1,20 +1,23 @@
 #!/bin/bash
 
-SSS="pyvserv.py"
+WWW=0 ; VVV=0 ; TTT=0 ; ONE=0
+
 GGG=""
-WWW=0;VVV=0; TTT=0
 KILLPROG="kill"
+SSS="pyvserv.py"
 
 function helpme {
-      echo -e "Usage: $(basename $0) [ -s server | -g sig  | -v | -t ]"
-      echo " options:"
-      echo "        -s server -- name of program to kill default: pyvserv.py"
-      echo "        -g sig    -- signal to send (ex:-USR1) default: none (-SIGTERM)"
-      echo "        -v        -- verbose (add more -v options for more printout)"
-      echo "        -t        -- test (show what would be executed)"
+      echo -e "Usage: $(basename $0) [ -s serv | -g sig | -k kprog | -v | -t ] "
+      echo -e "           -s serv   -- name of program to kill Default: 'pyvserv.py'"
+      echo -e "           -g sig    -- signal to send (ex:-USR1) Default: '-SIGTERM'"
+      echo -e "           -k kprog  -- use kill program. Default: 'kill'"
+      echo -e "           -v        -- verbose (add more -v options for more printout)"
+      echo -e "           -t        -- test (show what would be executed)"
+      echo -e "           -1        -- only kill one item (last one)"
+    exit "$1"
 }
 
-while getopts 'vhtw:s:g:' opt;
+while getopts ':1vhtw:s:g:k:' opt;
 do
   case "$opt" in
     w)
@@ -35,6 +38,12 @@ do
         echo "Processing option 'g'" $GGG
       fi
       ;;
+    k)
+      KILLPROG=$OPTARG
+      if [ "$VVV" == "1" ] ; then
+        echo "Using kill program 'k'" $KILLPROG
+      fi
+      ;;
     v)
       VVV=$((VVV+1))
       #echo "Processing option 'v'" $VVV
@@ -43,9 +52,12 @@ do
       TTT=$((TTT+1))
       #echo "Processing option 'v'" $VVV
       ;;
+    1)
+      ONE=$((ONE+1))
+      #echo "Processing option 'v'" $VVV
+      ;;
     h)
-      helpme
-      exit
+      helpme 0
      ;;
     ?)
         #echo -e "Invalid command option. $1"
@@ -57,36 +69,53 @@ done
 if [ "$VVV" -gt "1" ] ; then
     echo "Command:" $0 $@
 fi
+
 shift $(( OPTIND - 1 ));
 
 if [ "$1" != "" ] ; then
    SSS=$1
 fi
 
-#echo "SSS" $1
+if [ "$VVV" -gt "1" ] ; then
+    echo "SSS:  '$SSS'"
+fi
+
+#PROC2=$(ps xa | grep $SSS | grep -v killserv.sh | grep -v "grep ")
+#echo "ALLPIDS:" $PROC2
 
 # Updated to kill only the first occurance ; added sig arg, excluded grep
 #PROC=`ps xa | grep $SSS | grep -v "grep " | awk '{print $1}' | head -1`
-PROC=`ps xa | grep $SSS | grep -v "grep " | awk '{print $1}'`
+
+PROC=$(ps xa | grep $SSS | grep -v "grep " | \
+            grep -v "killserv.sh " | awk '{ printf("%s ",  $1) }' )
 
 if [ "$VVV" -gt "1" ] ; then
-    echo "Args:" $@
+    echo "PIDS:" $PROC
+fi
+
+if [ $ONE -ne 0 ] ; then
+    IFS=" " ; read -ra AAA <<<$PROC ;  IFS=""
+    IDX=$((${#AAA[@]}-1)) ;
+    PROC=${AAA[$IDX]}
+fi
+
+if [ "$VVV" -gt "1" ] ; then
+    echo "Args:" $0 $@
 fi
 
 if [ "$VVV" -gt "0" ] ; then
-    echo "Exec: kill" $GGG $PROC $@
-fi
-
-if [ "$TTT" -gt "0" ] ; then
-    echo "Would exec:" $KILLPROG $GGG $PROC $@
-    exit
+    echo "Exec: kill" $GGG $PROC
 fi
 
 if [ "$PROC" == "" ] ; then
     echo Server "'"$SSS"'" not running.
-    exit 0
+    helpme 1
 fi
 
+if [ "$TTT" -gt "0" ] ; then
+    echo "Would exec: "$KILLPROG $GGG $PROC
+    exit 0
+fi
 
 $KILLPROG $GGG $PROC
 

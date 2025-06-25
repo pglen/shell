@@ -14,14 +14,13 @@ sleep_until() {
     # Calculate the target epoch time
     NOW=$(date "+%s" 2>/dev/null)
     target_epoch=$(date -d "$target_date" "+%s" 2>/dev/null)
+    if [ "$target_epoch" == "" ]; then
+        echo "Invalid date format for '$1'. Format: 'YYYY-MM-DD HH:MM'."
+        exit 1
+    fi
     if [ "$target_epoch" -le "$NOW" ] ; then
         echo "Cannot set alarm into the past: $target_date"
         exit 1
-    fi
-    if [ "$target_epoch" == "" ]; then
-        #echo no date set
-        echo "Invalid date format. Please use a format like 'next Monday 08:00' or 'YYYY-MM-DD HH:MM'."
-        return 1
     fi
     #repoch=$(date --date @"$target_epoch" +"%Y-%m-%d %H:%M" 2>/dev/null)
     repoch=$(date --date @"$target_epoch" 2>/dev/null)
@@ -101,15 +100,18 @@ sleep_for() {
     fi
 }
 
+#    echo -e "         -m MODE     Sleep mode: mem disk off no on"
+
 function help() {
     echo -e "Usage: $(basename "$0") [ -v ] [ -u ] [ -s seconds ]"
-    echo -e "         -u          Simulate, do not sleep (for testing)"
     echo -e "         -h          Help (this screen)"
+    echo -e "         -u          Simulate, do not sleep (for testing)"
     echo -e "         -c BCNT     Number of beeps per section default: 3"
-    echo -e "         -m MODE     Sleep mode: mem disk off no on"
-    echo -e "         -d FILE     Sound to play"
-    echo -e "         -s SEC      Sleep seconds"
-    echo -e "         -w TIME     Wake at time"
+    echo -e "         -d FILE     Sound file to play"
+    echo -e "         -s SEC      Sleep SEC seconds"
+    echo -e "         -w TIME     Wake at TIME "
+    echo -e
+    echo -e "For TIME format specs see the 'date' program"
 
     exit "$1"
 }
@@ -152,7 +154,7 @@ shift $(( OPTIND - 1 ));
 
 #echo mode: $MODE
 
-if [ "$SSS" -ne 0 ] ; then
+if [ $((SSS)) -ne 0 ] ; then
     logaction "Sleep for $SSS sec"
     sleep_for "$SSS"s "$REALS"
 else
