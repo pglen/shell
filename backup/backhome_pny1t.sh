@@ -28,7 +28,19 @@ if [ "$(pwd)" != "$HOME" ] ; then
     echo "Warn: not started from home directory"
     # exit
 fi
+
+echo Collecting unreadables ...
+
+exclude_file=$(mktemp)
+find . ! -readable -o -type d ! -executable |
+  sed -e 's:^\./:/:' -e 's:[?*\\[]:\\1:g' >>"$exclude_file"
+#rsync -rlptD --exclude-from="$exclude_file" . /target/directory
+
+#echo except files created.
 #exit
+
+echo OK
+
 #	    	--exclude=".git"              \
 
 shopt -s dotglob
@@ -46,8 +58,11 @@ rsync -auq --inplace --info=progress2        \
 			--exclude=".trash/"              \
 			--exclude=".cache/"              \
 			--exclude=".local/"              \
-     * $DDD/ 2>~/$ERRFILE
+            --exclude-from="$exclude_file"   \
+     ./* $DDD/ 2>~/$ERRFILE
 
 shopt -u dotglob
 
-cat  $ERRFILE
+#cat  $ERRFILE
+
+# EOF

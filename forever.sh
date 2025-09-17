@@ -1,18 +1,20 @@
 #!/bin/bash
 
-CNT=0 ; WWW=0.05  ; VERB=0 ; ERRX=0
+CNT=0 ; WWW=0.05  ; VERB=0 ; ERRX=0 ; NORMX=0
+VERSION=1.0
 
 function help() {
-    echo -e "Usage: $(basename $0) [ -v ] [ -e ] [ -w seconds ]"
+    echo -e "forever.sh Version:" $VERSION
+    echo -e "Usage: $(basename $0) [ -v ] [ -e ] [ -w seconds ] command [args]"
     echo -e "       -v          verbose, show counter"
     echo -e "       -e          exit if error"
+    echo -e "       -n          exit if no error"
     echo -e "       -h          help (this screen)"
     echo -e "       -w SEC      wait seconds between loops  (float is OK) "
-
     exit
 }
 
-while getopts ':hevw:' opt; do
+while getopts ':hevw:n' opt; do
   case "$opt" in
     w)
       WWW=$OPTARG
@@ -22,6 +24,9 @@ while getopts ':hevw:' opt; do
       ;;
     e)
       ERRX=1
+      ;;
+    n)
+      NORMX=1
       ;;
     v)
       VERB=$((VERB+1))
@@ -50,8 +55,12 @@ while true; do
     $1 $2 $3 $4 $5 $6 $7 $8 $9;
     ERR=$?
     if [ $ERRX -ne 0 ] ; then
-        echo qq
         if [ $ERR -ne 0 ] ; then
+            break;
+        fi
+    fi
+    if [ $NORMX -ne 0 ] ; then
+        if [ $ERR -eq 0 ] ; then
             break;
         fi
     fi

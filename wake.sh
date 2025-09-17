@@ -170,7 +170,7 @@ fi
 logaction  "Wake"
 
 # Allow the system to settle
-echo -n "Waking from sleep ... "
+echo -n "Waking from sleep ... $(date) "
 sleep 2
 echo OK
 
@@ -186,6 +186,8 @@ function doalert() {
         CNT=$((CNT+1))
     done
 }
+
+echo "Starting alerts."
 
 doalert $((BCNT)) 5
 doalert $((BCNT*2)) 1
